@@ -1,21 +1,38 @@
-import { useDispatch, useSelector } from "react-redux"
 import { Navigate, createSearchParams, useNavigate } from "react-router-dom"
-import { loginPostAsync, logout } from "../slices/loginSlice"
+import { useAtom } from "jotai"
+import { useResetAtom } from "jotai/utils"
+import signinState, { initState } from "../atoms/signinState"
+import { cartState } from "../atoms/cartState"
+import { loginPost } from "../api/memberApi"
+import { removeCookie, setCookie } from "../util/cookieUtil"
 
 const useCustomLogin = () => {
     const navigate = useNavigate()
-    const dispatch = useDispatch()
-    const loginState = useSelector(state => state.loginSlice)
+    const [loginState, setLoginState] = useAtom(signinState)
+    const resetCartState = useResetAtom(cartState)
     const isLogin = loginState.email ? true : false
 
     const doLogin = async (loginParam) => {
-        const action = await dispatch(loginPostAsync(loginParam))
-        
-        return action.payload
+        const result = await loginPost(loginParam)
+        console.log(result)
+
+        if (!result.error) {
+            saveAsCookie(result)
+        }
+
+        return result
+    }
+
+    const saveAsCookie = (data) => {
+        setCookie("member", JSON.stringify(data), 1) 
+        setLoginState(data)
     }
 
     const doLogout = () => {
-        dispatch(logout())
+        removeCookie('member')
+
+        setLoginState({...initState})
+        resetCartState()
     }
 
     const moveToPath = (path) => {
@@ -31,6 +48,7 @@ const useCustomLogin = () => {
     }
 
     const exceptionHandle = (ex) => {
+
         console.log("Exception------------------------")
         console.log(ex)
 
@@ -52,7 +70,7 @@ const useCustomLogin = () => {
         }
     }
 
-    return {loginState, isLogin, doLogin, doLogout, moveToPath, moveToLogin, moveToLoginReturn, exceptionHandle}
+    return {loginState, isLogin, doLogin, doLogout, saveAsCookie, moveToPath, moveToLogin, moveToLoginReturn, exceptionHandle}
 }
 
 export default useCustomLogin
