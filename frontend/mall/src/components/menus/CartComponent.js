@@ -1,28 +1,13 @@
-import { useEffect, useMemo } from "react";
+import { useAtomValue } from "jotai";
 import useCustomLogin from "../../hooks/useCustomLogin";
 import useCustomCart from "../../hooks/useCustomCart";
 import CartItemComponent from "../cart/CartItemComponent";
+import { cartTotalState } from "../../atoms/cartState";
 
 const CartComponent = () => {
     const {isLogin, loginState} = useCustomLogin()
-    const {refreshCart, cartItems, changeCart} = useCustomCart()
-
-    const total = useMemo(() => {
-        let total = 0
-
-        for (const item of cartItems) {
-            total += item.price * item.qty
-        }
-
-        return total
-
-    }, [cartItems])
-
-    useEffect(() => {
-        if (isLogin) {
-            refreshCart()
-        }
-    }, [isLogin])
+    const {cartItems, changeCart} = useCustomCart()
+    const totalValue = useAtomValue(cartTotalState)
 
     return (
         <div className="w-full">
@@ -32,6 +17,7 @@ const CartComponent = () => {
                         <div className="font-extrabold text-2xl w-4/5">
                             {loginState.nickname}'s Cart
                         </div>
+
                         <div className="bg-orange-600 text-center text-white font-bold w-1/5 rounded-full m-1">
                             {cartItems.length}
                         </div>
@@ -40,19 +26,20 @@ const CartComponent = () => {
                     <div>
                         <ul>
                             {cartItems.map(item =>
-                                <CartItemComponent {...item} key={item.cino} changeCart={changeCart} email={loginState.email}/>
+                                <CartItemComponent {...item}
+                                    key={item.cino}
+                                    changeCart={changeCart}
+                                    email={loginState.email}/>
                             )}
                         </ul>
                     </div>
 
-                    <div>
-                        <div className="text-2xl text-right font-extrabold">
-                            TOTAL: {total}
-                        </div>
+                    <div className="m-2 text-3xl ">
+                        TOTAL: {totalValue}
                     </div>
                 </div>
                 :
-                <></>
+                <div></div>
             }
         </div>
     );
