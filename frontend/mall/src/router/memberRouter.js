@@ -10,7 +10,7 @@ const memberRouter = () => {
             path: "login",
             element: <Suspense fallback={Loading}><Login/></Suspense>
         },
-
+        
         {
             path: "logout",
             element: <Suspense fallback={Loading}><LogoutPage/></Suspense>,
