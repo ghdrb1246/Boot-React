@@ -24,6 +24,13 @@ const ReadComponent = ({pno}) => {
     const {changeCart, cartItems} = useCustomCart()
     const {loginState} = useCustomLogin()
 
+    const {isFetching, data} = useQuery({
+        queryKey: ['products', pno],
+        queryFn: () => getOne(pno),
+        staleTime: 1000 * 10 * 60,
+        retry: 1
+    })
+
     const handleClickAddCart = () => {
         let qty = 1
 
