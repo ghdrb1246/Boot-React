@@ -3,6 +3,9 @@ import { Navigate } from "react-router-dom";
 
 const Loading = <div>Loading....</div>
 const ProductsList = lazy(() => import("../pages/products/ListPage"))
+const ProductsAdd = lazy(() => import("../pages/products/AddPage"))
+const ProductRead = lazy(() => import("../pages/products/ReadPage"))
+const ProductModify = lazy(() => import("../pages/products/ModifyPage"))
 
 const productsRouter = () => {
     return [
