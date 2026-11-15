@@ -19,7 +19,12 @@ const productsRouter = () => {
         {
             path: "add",
             element: <Suspense fallback={Loading}><ProductsAdd/></Suspense>
-        } 
+        },
+
+        {
+            path: "read/:pno",
+            element: <Suspense fallback={Loading}><ProductRead/></Suspense>
+        }
     ]
 }
 
