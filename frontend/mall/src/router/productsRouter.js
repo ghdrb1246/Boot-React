@@ -7,13 +7,19 @@ const ProductsList = lazy(() => import("../pages/products/ListPage"))
 const productsRouter = () => {
   return [
     {
+      path: "",
+      element: <Navigate replace to="/products/list"/>
+    },
+
+    {
       path: "list",
       element: <Suspense fallback={Loading}><ProductsList/></Suspense>
     },
+    
     {
-      path: "",
-      element: <Navigate replace to="/products/list"/>
-    }
+        path: "add",
+        element: <Suspense fallback={Loading}><ProductsAdd/></Suspense>
+    } 
   ]
 }
 
