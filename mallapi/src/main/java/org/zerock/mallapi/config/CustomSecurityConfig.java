@@ -15,11 +15,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.zerock.mallapi.security.handler.APILoginFailHandler;
-// import org.zerock.mallapi.security.filter.JWTCheckFilter;
+import org.zerock.mallapi.security.filter.JWTCheckFilter;
 // import org.zerock.mallapi.security.handler.APILoginFailHandler;
-// import org.zerock.mallapi.security.handler.APILoginSuccessHandler;
-// import org.zerock.mallapi.security.handler.CustomAccessDeniedHandler;
 import org.zerock.mallapi.security.handler.APILoginSuccessHandler;
+import org.zerock.mallapi.security.handler.CustomAccessDeniedHandler;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+
+// import org.zerock.mallapi.security.handler.APILoginSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -27,6 +31,7 @@ import lombok.extern.log4j.Log4j2;
 @Configuration
 @Log4j2
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class CustomSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -44,6 +49,12 @@ public class CustomSecurityConfig {
             config.loginPage("/api/member/login");
             config.successHandler(new APILoginSuccessHandler());
             config.failureHandler(new APILoginFailHandler());
+        });
+
+        http.addFilterBefore(new JWTCheckFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling(config -> {
+            config.accessDeniedHandler(new CustomAccessDeniedHandler());
         });
 
         return http.build();
@@ -67,5 +78,25 @@ public class CustomSecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    // @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        if(request.getMethod().equals("OPTIONS")){
+            return true;
+        }
+
+        String path = request.getRequestURI();
+        log.info("check uri.............." + path);
+    
+        if(path.startsWith("/api/member/")) {
+            return true;
+        }
+        
+        if(path.startsWith("/api/products/view/")) {
+            return true;
+        }
+        
+        return false;
     }
 }
