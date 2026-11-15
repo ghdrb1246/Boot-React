@@ -74,7 +74,6 @@ const ListComponent = () => {
             )}
         </div>
 
-        {/* movePage 속성값으로는 handleClickPage를 전달 */}
         <PageComponent serverData={serverData} movePage={handleClickPage}></PageComponent>
         </div>
     );

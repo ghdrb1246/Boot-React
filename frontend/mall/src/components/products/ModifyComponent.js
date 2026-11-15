@@ -23,9 +23,9 @@ const ModifyComponent = ({pno}) => {
     const {moveToRead, moveToList} = useCustomMove()
 
     const query = useQuery({
-            queryKey: ['products', pno],
-            queryFn: () => getOne(pno),
-            staleTime: Infinity
+        queryKey: ['products', pno],
+        queryFn: () => getOne(pno),
+        staleTime: Infinity
     })
 
     useEffect(() => {

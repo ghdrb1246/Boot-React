@@ -48,7 +48,6 @@ const useCustomLogin = () => {
     }
 
     const exceptionHandle = (ex) => {
-
         console.log("Exception------------------------")
         console.log(ex)
 
