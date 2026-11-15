@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
 import net.coobird.thumbnailator.Thumbnails;
 
 @Component
@@ -33,18 +32,19 @@ public class CustomFileUtil {
     @PostConstruct
     public void init() {
         File tempFolder = new File(uploadPath);
-        
-        if(tempFolder.exists() == false) {
+
+        if (tempFolder.exists() == false) {
             tempFolder.mkdir();
         }
-        
+
         uploadPath = tempFolder.getAbsolutePath();
+
         log.info("-------------------------------------");
         log.info(uploadPath);
     }
 
     public List<String> saveFiles(List<MultipartFile> files) throws RuntimeException {
-        if(files == null || files.size() == 0){
+        if (files == null || files.size() == 0) {
             return null;
         }
 
@@ -52,46 +52,47 @@ public class CustomFileUtil {
         for (MultipartFile multipartFile : files) {
             String savedName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
             Path savePath = Paths.get(uploadPath, savedName);
-            
+
             try {
                 Files.copy(multipartFile.getInputStream(), savePath);
                 String contentType = multipartFile.getContentType();
-                
-                if(contentType != null && contentType.startsWith("image")){ //이미지여부 확인
-                    Path thumbnailPath = Paths.get(uploadPath, "s_"+savedName);
+
+                if (contentType != null && contentType.startsWith("image")) {
+                    Path thumbnailPath = Paths.get(uploadPath, "s_" + savedName);
+
                     Thumbnails.of(savePath.toFile())
-                    .size(200,200)
-                    .toFile(thumbnailPath.toFile());
+                            .size(200, 200)
+                            .toFile(thumbnailPath.toFile());
                 }
 
                 uploadNames.add(savedName);
-            } 
+            }
             catch (IOException e) {
                 throw new RuntimeException(e.getMessage());
             }
-            
-            return uploadNames;
         }
+
         return uploadNames;
     }
 
     public ResponseEntity<Resource> getFile(String fileName) {
-        Resource resource = new FileSystemResource(uploadPath+File.separator+fileName);
-        if(!resource.exists()) {
-            resource = new FileSystemResource(uploadPath+File.separator+"default.jpeg");
+        Resource resource = new FileSystemResource(uploadPath + File.separator + fileName);
+
+        if (!resource.exists()) {
+            resource = new FileSystemResource(uploadPath + File.separator + "default.jpeg");
         }
-        
+
         HttpHeaders headers = new HttpHeaders();
-        try{
+        try {
             headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
         } 
-        catch(Exception e){
+        catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-    
+
         return ResponseEntity.ok().headers(headers).body(resource);
     }
-    
+
     public void deleteFiles(List<String> fileNames) {
         if (fileNames == null || fileNames.size() == 0) {
             return;
