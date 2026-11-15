@@ -24,6 +24,11 @@ const productsRouter = () => {
         {
             path: "read/:pno",
             element: <Suspense fallback={Loading}><ProductRead/></Suspense>
+        },
+
+        {
+            path: "modify/:pno",
+            element: <Suspense fallback={Loading}><ProductModify/></Suspense>
         }
     ]
 }
