@@ -17,6 +17,7 @@ export const getList = async (pageParam) => {
     return res.data
 }
 
+/* 
 export const getOne = async (pno) => {
     const res = await axios.get(`${host}/${pno}`)
     
