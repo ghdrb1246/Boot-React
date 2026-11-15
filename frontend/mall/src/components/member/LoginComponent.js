@@ -1,5 +1,6 @@
 import { useState } from "react"
 import useCustomLogin from "../../hooks/useCustomLogin"
+import KakaoLoginComponent from "./KakaoLoginComponent"
 
 const initState = {
     email: '',
@@ -22,7 +23,8 @@ const LoginComponent = () => {
 
             if (data.error) {
                 alert("이메일과 패스워드를 다시 확인하세요")
-            } else {
+            } 
+            else {
                 alert("로그인 성공")
                 moveToPath('/')
             }
@@ -38,16 +40,14 @@ const LoginComponent = () => {
             <div className="flex justify-center">
                 <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                     <div className="w-2/5 p-6 text-right font-bold">Email</div>
-                    <input className="w-1/5 p-6 rounded-r border border-solid border-neutral-500 shadow-md" name="email" type={'text'} value={loginParam.email} onChange={handleChange}>
-                    </input>
+                    <input className="w-1/5 p-6 rounded-r border border-solid border-neutral-500 shadow-md" name="email" type={'text'} value={loginParam.email} onChange={handleChange}></input>
                 </div>
             </div>
 
             <div className="flex justify-center">
                 <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                     <div className="w-2/5 p-6 text-right font-bold">Password</div>
-                    <input className="w-1/5 p-6 rounded-r border border-solid border-neutral-500 shadow-md" name="pw" type={'password'} value={loginParam.pw} onChange={handleChange}>
-                    </input>
+                    <input className="w-1/5 p-6 rounded-r border border-solid border-neutral-500 shadow-md" name="pw" type={'password'} value={loginParam.pw} onChange={handleChange}></input>
                 </div>
             </div>
 
@@ -60,6 +60,8 @@ const LoginComponent = () => {
                     </div>
                 </div>
             </div>
+
+            <KakaoLoginComponent/>
         </div>
     );
 }
