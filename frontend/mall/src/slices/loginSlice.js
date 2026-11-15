@@ -44,21 +44,21 @@ const loginSlice = createSlice({
 
     extraReducers: (builder) => {
         builder.addCase(loginPostAsync.fulfilled, (state, action) => {
-        console.log("fulfilled")
+            console.log("fulfilled")
 
-        const payload = action.payload
+            const payload = action.payload
 
-        if (!payload.error) {
-            setCookie("member", JSON.stringify(payload), 1)
-        }
+            if (!payload.error) {
+                setCookie("member", JSON.stringify(payload), 1)
+            }
 
-        return payload
+            return payload
         })
         .addCase(loginPostAsync.pending, (state, action) => {
-        console.log("pending")
+            console.log("pending")
         })
         .addCase(loginPostAsync.rejected, (state, action) => {
-        console.log("rejected")
+            console.log("rejected")
         })
     }
 })

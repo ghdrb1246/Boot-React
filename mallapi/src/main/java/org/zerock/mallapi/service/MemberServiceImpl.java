@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import org.zerock.mallapi.domain.Member;
 import org.zerock.mallapi.domain.MemberRole;
 import org.zerock.mallapi.dto.MemberDTO;
-// import org.zerock.mallapi.dto.MemberModifyDTO;
+import org.zerock.mallapi.dto.MemberModifyDTO;
 import org.zerock.mallapi.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,7 @@ public class MemberServiceImpl implements MemberService {
 
         return memberDTO;
     }
-/* 
+
     @Override
     public void modifyMember(MemberModifyDTO memberModifyDTO) {
 
@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
 
         memberRepository.save(member);
     }
- */
+
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private String getEmailFromKakaoAccessToken(String accessToken) {
         String kakaoGetUserURL = "https://kapi.kakao.com/v2/user/me";

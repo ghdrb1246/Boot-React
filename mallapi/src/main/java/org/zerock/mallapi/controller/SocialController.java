@@ -3,26 +3,27 @@ package org.zerock.mallapi.controller;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
-// import org.springframework.web.bind.annotation.PutMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.zerock.mallapi.dto.MemberDTO;
-// import org.zerock.mallapi.dto.MemberModifyDTO;
+import org.zerock.mallapi.dto.MemberModifyDTO;
 import org.zerock.mallapi.service.MemberService;
 import org.zerock.mallapi.util.JWTUtil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+@RequestMapping("/api/member")
 @RestController
 @Log4j2
 @RequiredArgsConstructor
 public class SocialController {
     private final MemberService memberService;
 
-    // 쿼리 파라미터 이름을 명시 (-parameters 옵션이 없는 환경 대비)
-    @GetMapping("/api/member/kakao")
+    @GetMapping("/kakao")
     public Map<String, Object> getMemberFromKakao(@RequestParam(name = "accessToken") String accessToken) {
 
         log.info("access Token : " + accessToken);
@@ -37,12 +38,12 @@ public class SocialController {
 
         return claims;
     }
-/* 
-    @PutMapping("/api/member/modify")
+
+    @PutMapping("/modify")
     public Map<String, String> modify(@RequestBody MemberModifyDTO memberModifyDTO) {
         log.info("member modify: " + memberModifyDTO);
         memberService.modifyMember(memberModifyDTO);
 
         return Map.of("result", "modified");
-    } */
+    }
 }
